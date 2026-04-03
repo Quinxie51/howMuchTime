@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,24 +8,31 @@
   <meta name="description" content="A quiet question about time." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,200;1,200&family=Special+Elite&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,200;1,200&family=Special+Elite&family=Viaoda+Libre&display=swap"
+    rel="stylesheet" />
   <style>
-    *, *::before, *::after {
+    *,
+    *::before,
+    *::after {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
 
-    html, body {
+    html,
+    body {
       width: 100%;
       height: 100%;
-      overflow: hidden; /* No scroll */
+      overflow: hidden;
+      /* No scroll */
     }
 
     body {
       background: #fdfdfd;
       color: #111;
-      font-family: 'Special Elite', monospace; /* Typewriter font */
+      font-family: 'Special Elite', monospace;
+      /* Typewriter font */
       display: flex;
       align-items: center;
       justify-content: center;
@@ -35,7 +43,10 @@
     body::before {
       content: '';
       position: absolute;
-      top: 0; left: 0; width: 100%; height: 100%;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
       opacity: 0.04;
       pointer-events: none;
@@ -57,12 +68,10 @@
       transition: transform 2s ease, top 2s ease;
     }
 
-    body[data-tier="8"] .anchor-container {
-      top: 10%;
-    }
+
 
     .question {
-      font-family: 'Cormorant', serif;
+      font-family: 'Viaoda Libre', serif;
       font-size: clamp(1.6rem, 3.5vw, 2.8rem);
       font-weight: 200;
       font-style: italic;
@@ -74,60 +83,54 @@
     .input-row {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 16px;
+      width: 100%;
+      max-width: 400px;
     }
 
-    .time-input {
-      background: transparent;
-      border: none;
-      border-bottom: 1.5px solid #111;
-      outline: none;
-      font-family: 'Special Elite', monospace;
-      font-size: 1.4rem;
-      color: #111;
-      width: 100px;
-      text-align: center;
-      padding: 8px 4px;
-      appearance: none;
-      -moz-appearance: textfield;
-      transition: opacity 0.5s ease;
-    }
-    .time-input.hidden {
-      opacity: 0;
-      pointer-events: none;
-    }
-
-    .time-input::-webkit-inner-spin-button,
-    .time-input::-webkit-outer-spin-button {
+    .time-slider {
       -webkit-appearance: none;
+      appearance: none;
+      flex-grow: 1;
+      height: 1px;
+      background: #111;
+      outline: none;
+      cursor: pointer;
     }
 
-    .time-input::placeholder { color: #ccc; }
+    .time-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #111;
+      cursor: pointer;
+    }
 
-    .unit-select {
-      background: #f0f0f0;
+    .time-slider::-moz-range-thumb {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #111;
+      cursor: pointer;
       border: none;
-      border-radius: 999px;
-      outline: none;
+    }
+
+    .slider-label {
       font-family: 'Special Elite', monospace;
       font-size: 0.9rem;
-      color: #111;
-      padding: 8px 32px 8px 16px;
-      appearance: none;
-      -webkit-appearance: none;
-      cursor: pointer;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5' viewBox='0 0 8 5'%3E%3Cpath d='M0 0l4 5 4-5z' fill='%23666'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 12px center;
-      transition: background 0.2s ease;
+      color: #666;
+      white-space: nowrap;
     }
-    .unit-select:hover { background-color: #e4e4e4; }
 
     /* The Canvas / Text area */
     .canvas {
       position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
       pointer-events: none;
       display: flex;
       align-items: center;
@@ -136,23 +139,82 @@
     }
 
     /* Scaling mechanism */
-    body[data-tier="1"] .canvas { transform: scale(1); }
-    body[data-tier="2"] .canvas { transform: scale(0.95); }
-    body[data-tier="3"] .canvas { transform: scale(0.9); }
-    body[data-tier="4"] .canvas { transform: scale(0.85); }
-    body[data-tier="5"] .canvas { transform: scale(0.8); }
-    body[data-tier="6"] .canvas { transform: scale(0.75); }
-    body[data-tier="7"] .canvas { transform: scale(0.7); }
-    body[data-tier="8"] .canvas { transform: scale(0.65); }
+    body[data-tier="1"] .canvas {
+      transform: scale(1);
+    }
+
+    body[data-tier="2"] .canvas {
+      transform: scale(0.98);
+    }
+
+    body[data-tier="3"] .canvas {
+      transform: scale(0.96);
+    }
+
+    body[data-tier="4"] .canvas {
+      transform: scale(0.94);
+    }
+
+    body[data-tier="5"] .canvas {
+      transform: scale(0.92);
+    }
+
+    body[data-tier="6"] .canvas {
+      transform: scale(0.90);
+    }
+
+    body[data-tier="7"] .canvas {
+      transform: scale(0.88);
+    }
+
+    body[data-tier="8"] .canvas {
+      transform: scale(0.86);
+    }
+
+    body[data-tier="9"] .canvas {
+      transform: scale(0.84);
+    }
+
+    body[data-tier="10"] .canvas {
+      transform: scale(0.82);
+    }
+
+    body[data-tier="11"] .canvas {
+      transform: scale(0.80);
+    }
+
+    body[data-tier="12"] .canvas {
+      transform: scale(0.78);
+    }
+
+    body[data-tier="13"] .canvas {
+      transform: scale(0.76);
+    }
+
+    body[data-tier="14"] .canvas {
+      transform: scale(0.74);
+    }
+
+    body[data-tier="15"] .canvas {
+      transform: scale(0.72);
+    }
+
+    body[data-tier="16"] .canvas {
+      transform: scale(0.70);
+    }
 
     .tier-block {
       position: absolute;
       opacity: 0;
       visibility: hidden;
       line-height: 1.6;
+      font-size: 1.2rem;
+      color: #111;
+      font-weight: normal;
+      font-style: normal;
       transition: opacity 1.5s ease, transform 3s ease;
     }
-    
+
     .tier-block.active {
       visibility: visible;
       opacity: 1;
@@ -164,6 +226,7 @@
       transform: translateY(10px);
       transition: opacity 1.2s ease, transform 1.2s ease;
     }
+
     .tier-block.active span {
       opacity: 1;
       transform: translateY(0);
@@ -172,15 +235,15 @@
     /* Positions & Styles for Tiers */
     /* Tier 1: Center, below anchor */
     #tier-1 {
-      top: 60%;
+      top: 66%;
       left: 50%;
       transform: translateX(-50%);
       width: 40%;
       text-align: center;
-      font-size: 1.2rem;
     }
+
     .cursor {
-      display: inline-block !important; /* override span block */
+      display: inline-block !important;
       width: 2px;
       height: 1.1em;
       background-color: #111;
@@ -191,110 +254,144 @@
       transform: none !important;
     }
 
-    /* Tier 2: Below Tier 1, smaller weight/size */
+    /* Tier 2: Below Tier 1 */
     #tier-2 {
-      top: 75%;
+      top: 78%;
       left: 50%;
       transform: translateX(-50%);
       width: 40%;
       text-align: center;
-      font-size: 1rem;
-      color: #444;
     }
 
-    /* Tier 3: Left side drifting in, italic lines */
+    /* Tier 3: Left side */
     #tier-3 {
-      top: 35%;
-      left: 5%;
-      width: 28%;
-      font-size: 1.1rem;
-      font-style: italic;
-      color: #333;
+      top: 32%;
+      left: 6%;
+      width: 25%;
     }
 
-    /* Tier 4: Upper-left, smaller font, light weight */
+    /* Tier 4: Right side */
     #tier-4 {
-      top: 5%;
-      left: 5%;
-      width: 28%;
-      font-size: 0.9rem;
-      color: #555;
+      top: 32%;
+      right: 6%;
+      width: 25%;
+      text-align: right;
     }
 
-    /* Tier 5: Lower-right, slightly ghosted */
+    /* Tier 5: Upper-left */
     #tier-5 {
-      top: 45%;
-      right: 5%;
-      width: 28%;
-      font-size: 1rem;
-      color: #666;
-      text-align: right;
+      top: 15%;
+      left: 6%;
+      width: 25%;
     }
 
-    /* Tier 6: Upper-right, bolder lines */
+    /* Tier 6: Upper-right */
     #tier-6 {
-      top: 5%;
-      right: 5%;
-      width: 28%;
-      font-size: 1.1rem;
-      font-weight: bold;
+      top: 15%;
+      right: 6%;
+      width: 25%;
       text-align: right;
-      color: #222;
     }
 
-    /* Tier 7: Lower-left, mix of sizes (handled by inline styling or general) */
+    /* Tier 7: Lower-left */
     #tier-7 {
-      bottom: 5%;
-      left: 5%;
-      width: 28%;
-      font-size: 0.95rem;
-      color: #111;
+      bottom: 25%;
+      left: 6%;
+      width: 25%;
     }
-    #tier-7 span:nth-child(even) { font-size: 0.8rem; color: #555; }
-    #tier-7 span:nth-child(odd) { font-size: 1.1rem; }
 
-    /* Tier 8: Center, largest type on page */
+    /* Tier 8: Top-left */
     #tier-8 {
-      top: 50%;
+      top: 4%;
+      left: 12%;
+      width: 25%;
+    }
+
+    /* Tier 9: Top-right */
+    #tier-9 {
+      top: 4%;
+      right: 12%;
+      width: 25%;
+      text-align: right;
+    }
+
+    /* Tier 10: Lower-right */
+    #tier-10 {
+      bottom: 25%;
+      right: 6%;
+      width: 25%;
+      text-align: right;
+    }
+
+    /* Tier 11: Bottom-left */
+    #tier-11 {
+      bottom: 6%;
+      left: 12%;
+      width: 25%;
+    }
+
+    /* Tier 12: Bottom-right */
+    #tier-12 {
+      bottom: 6%;
+      right: 12%;
+      width: 25%;
+      text-align: right;
+    }
+
+    /* Tier 13: Bottom center */
+    #tier-13 {
+      bottom: 2%;
       left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 2.5rem;
+      transform: translateX(-50%);
+      width: 40%;
       text-align: center;
-      color: #000;
-      width: 80%;
-      z-index: 50;
-      background: rgba(253, 253, 253, 0.85); /* subtle background so it's readable over other text */
-      padding: 20px;
-      border-radius: 8px;
+    }
+
+    /* Tier 14: Mid-left, offset */
+    #tier-14 {
+      top: 65%;
+      left: 14%;
+      width: 25%;
+    }
+
+    /* Tier 15: Mid-right, offset */
+    #tier-15 {
+      top: 65%;
+      right: 14%;
+      width: 25%;
+      text-align: right;
+    }
+
+    /* Tier 16: Top center, wide */
+    #tier-16 {
+      top: 2%;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+      width: 60%;
     }
 
     @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0; }
-    }
 
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0;
+      }
+    }
   </style>
 </head>
+
 <body data-tier="0">
   <div class="anchor-container">
-    <p class="question">how much time do you have for me?</p>
+    <p class="question">How much time do you have for me?</p>
     <div class="input-row">
-      <input
-        class="time-input"
-        id="timeValue"
-        type="number"
-        min="0"
-        placeholder="0"
-        autocomplete="off"
-      />
-      <select class="unit-select" id="timeUnit">
-        <option value="minutes">minutes</option>
-        <option value="hours">hours</option>
-        <option value="days">days</option>
-        <option value="months">months</option>
-        <option value="years">years</option>
-        <option value="lifetime">a lifetime</option>
-      </select>
+      <span class="slider-label">1 minute</span>
+      <input class="time-slider" id="timeSlider" type="range" min="0" max="16" value="0" />
+      <span class="slider-label">a lifetime</span>
     </div>
   </div>
 
@@ -307,104 +404,79 @@
     <div class="tier-block" id="tier-6"></div>
     <div class="tier-block" id="tier-7"></div>
     <div class="tier-block" id="tier-8"></div>
+    <div class="tier-block" id="tier-9"></div>
+    <div class="tier-block" id="tier-10"></div>
+    <div class="tier-block" id="tier-11"></div>
+    <div class="tier-block" id="tier-12"></div>
+    <div class="tier-block" id="tier-13"></div>
+    <div class="tier-block" id="tier-14"></div>
+    <div class="tier-block" id="tier-15"></div>
+    <div class="tier-block" id="tier-16"></div>
   </div>
 
   <script>
-    const input = document.getElementById('timeValue');
-    const select = document.getElementById('timeUnit');
+    const slider = document.getElementById('timeSlider');
 
     const tiersData = {
       1: ["Hi.", "My name is Quinxie.", "Nice to meet you.  |"],
       2: ["I'm 22.", "I study Computer Science and Graphic Design", "at a small college in Illinois.", "I'm not from here."],
-      3: ["I drew before I knew how to write.", "My dad had an old desktop — I played the minesweeper on it for hours.", "I'm an ambidextrous", "Art and technology have always been my two hands.", "I just spent a long time pretending I only had one."],
-      4: ["My most recognized work is a business card.", "Not a regular one — an AR business card I made for a career fair.", "You hold it up to your phone and something comes alive.", "Recruiters passed it around the room.", "It went viral."],
-      5: ["Other things I've built:", "a long-distance couples app, because closeness shouldn't require proximity.", "Pastport, because your story deserves a home.", "SkillEx, because the smartest resource is often the person next to you.", "I make things I wish existed."],
-      6: ["When I got lost, I flew to Italy.", "There I relearned how to sketch, how to film, how to see fabric as language.", "Filmmaking and fashion design became my new obsession.", "If I had to pick one city in the world that resembles me most —", "it would be Florence."],
-      7: ["My name isn't actually Quinxie.", "My name is Quyen - but I was obsessed with Pixar, and I thought it was spelled Pixie.", "So I took the \"xie\" and put it with my name.", "Disney is the reason I came to the United States - ", "a story about a kid who toured a Disney studio and got to try AR and VR lit something in me that never went out."],
-      8: ["I don't know what the US did to me exactly.", "It gave me an identity crisis.", "It gave me a new identity.", "It brought me back to what has always been my identity.", "I'm talking about how I see people, how I build products, how I tell stories, how I walk into a room.", "<br>", "Hi. My name is Quinxie."]
+      3: ["I still don't know how to use Fahrenheit."],
+      4: ["I use the random decision maker to make decisions for me every day."],
+      5: ["I'm an ambidextrous."],
+      6: ["The first time I tried skateboarding, I was skating straight to a lake."],
+      7: ["I love doing Hackathons and I won 9 of them."],
+      8: ["I drew before I knew how to write.", "My dad had an old desktop — I played the minesweeper on it for hours.", "Art and technology have always been my two hands.", "I just spent a long time pretending I only had one."],
+      9: ["My most recognized work is a business card.", "Not a regular one - an AR business card I made for a career fair.", "You hold it up to your phone and something comes alive.", "Recruiters passed it around the room.", "It went viral."],
+      10: ["Favorite things I've built:", "a long-distance couples app, a time traveling app, a 3D museum, an anti brainroot while coding app", "I make things I wish existed."],
+      11: ["My first dream job is to be a police officer, and my next one is to be the president.", "I guess I have loved power since I was young :)", "I started making a vlog in high school, when I applied to a scholarship for a trip to Japan.", "It got canceled due to COVID. I was so upset, and I posted that video on YouTube.", "It got 1k views."],
+      12: ["When I got lost, I flew to Italy.", "There I relearned how to sketch, how to film, how to see fabric as language.", "Filmmaking and fashion design became my new obsession.", "If I had to pick one city in the world that resembles me most —", "it would be Florence."],
+      13: ["I was away from home since I was 15.", "I went to a high school for the gifted and lived in a dorm with 7 other people.", "My late-night ritual is calling my mom, who is 14,000 km away."],
+      14: ["Uncommon opinion, but I don't listen to music.", "I mean, I love music, but I don't listen to it a lot.", "I have a lot of noise in my head, so most of the time I just want to keep a peace of mind."],
+      15: ["My name isn't actually Quinxie.", "My name is Quyen - but I was obsessed with Pixar, and I thought it was spelled Pixie.", "So I took the \"xie\" and put it with my name.", "Disney is the reason I came to the United States —", "a story about a kid who toured a Disney studio and got to try AR and VR lit something in me that never went out."],
+      16: ["I don't know what the US did to me exactly.", "It gave me an identity crisis.", "It gave me a new identity.", "It brought me back to what has always been my identity.", "I'm talking about how I see people, how I build products, how I tell stories, how I walk into a room.", "<br>", "Hi. My name is Quinxie."]
     };
 
     // Populate DOM for tiers
-    for (let i = 1; i <= 8; i++) {
-        const block = document.getElementById(`tier-${i}`);
-        let html = '';
-        tiersData[i].forEach((line, idx) => {
-            if (line === '<br>') {
-                html += '<br>';
-                return;
-            }
-            // Appear all at once instead of staggered
-            const delay = "0s";
-            
-            // Add cursor to tier 1
-            if (i === 1 && idx === 2) {
-                html += `<span style="transition-delay: ${delay}">${line}<div class="cursor"></div></span>`;
-            } else if (i === 8 && idx === tiersData[i].length - 1) {
-                // Remove cursor from tier 1 visually and transplant here conceptually,
-                // but requirements say "The blinking cursor from Tier 1 is still visible, somewhere in the middle of all the words."
-                // So leaving it in Tier 1 is correct.
-                html += `<span style="transition-delay: ${delay}">${line}</span>`;
-            } else {
-                html += `<span style="transition-delay: ${delay}">${line}</span>`;
-            }
-        });
-        block.innerHTML = html;
-    }
+    for (let i = 1; i <= 16; i++) {
+      const block = document.getElementById(`tier-${i}`);
+      let html = '';
+      tiersData[i].forEach((line, idx) => {
+        if (line === '<br>') {
+          html += '<br>';
+          return;
+        }
+        // Appear all at once instead of staggered
+        const delay = "0s";
 
-    function calculateMinutes(val, unit) {
-        if (unit === 'lifetime') return Infinity;
-        if (isNaN(val) || val < 0) return 0;
-        
-        const conversions = {
-            minutes: 1,
-            hours: 60,
-            days: 1440,
-            months: 43200, // 30 days
-            years: 525600 // 365 days
-        };
-        return val * conversions[unit];
-    }
-
-    function determineTier(minutes) {
-        if (minutes === Infinity) return 8;
-        if (minutes <= 0) return 0;
-        if (minutes <= 5) return 1;
-        if (minutes <= 15) return 2;
-        if (minutes <= 60) return 3;
-        if (minutes <= 5 * 60) return 4;
-        if (minutes <= 3 * 1440) return 5;
-        if (minutes <= 14 * 1440) return 6; // 2 weeks
-        if (minutes <= 6 * 43200) return 7; // 6 months
-        return 8; // Lifetime
+        // Add cursor to tier 1
+        if (i === 1 && idx === 2) {
+          html += `<span style="transition-delay: ${delay}">${line}<div class="cursor"></div></span>`;
+        } else if (i === 16 && idx === tiersData[i].length - 1) {
+          html += `<span style="transition-delay: ${delay}">${line}</span>`;
+        } else {
+          html += `<span style="transition-delay: ${delay}">${line}</span>`;
+        }
+      });
+      block.innerHTML = html;
     }
 
     function update() {
-        const unit = select.value;
-        const val = parseFloat(input.value);
-        
-        if (unit === 'lifetime') {
-            input.classList.add('hidden');
+      const maxTier = parseInt(slider.value, 10);
+      document.body.dataset.tier = maxTier;
+
+      for (let i = 1; i <= 16; i++) {
+        const block = document.getElementById(`tier-${i}`);
+        if (i <= maxTier && maxTier > 0) {
+          block.classList.add('active');
         } else {
-            input.classList.remove('hidden');
+          block.classList.remove('active');
         }
-
-        const mins = calculateMinutes(val, unit);
-        const maxTier = determineTier(mins);
-        document.body.dataset.tier = maxTier;
-
-        for (let i = 1; i <= 8; i++) {
-            const block = document.getElementById(`tier-${i}`);
-            if (i <= maxTier && maxTier > 0) {
-                block.classList.add('active');
-            } else {
-                block.classList.remove('active');
-            }
-        }
+      }
     }
 
-    input.addEventListener('input', update);
-    select.addEventListener('change', update);
+    slider.addEventListener('input', update);
 
   </script>
 </body>
+
 </html>
